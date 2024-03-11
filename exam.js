@@ -1,23 +1,3 @@
-class Account {
-  username = "";
-  password = "";
-  status = "";
-  constructor(username, password, status) {
-    this.username = username;
-    this.password = password;
-    this.status = status;
-  }
-  getUsername() {
-    return this.name;
-  }
-  getPassword() {
-    return this.password;
-  }
-  toString() {
-    return `Username[Username = ${this.username}, password = ${this.password}]`;
-  }
-}
-
 class Person {
   name = "";
   address = "";
@@ -31,82 +11,84 @@ class Person {
     this.phone = phone;
     this.accountType = accountType;
   }
-  getName() {
-    return this.name;
-  }
-  getAddress() {
-    return this.address;
-  }
-  setAddress() {
-    this.address = address;
-  }
-  setEmail() {
-    this.email = email;
-  }
-  getEmail() {
-    return this.email;
-  }
-  setPhone() {
-    this.phone = phone;
-  }
-  getPhone() {
-    return this.phone;
-  }
-  setAccountType() {
+  setAccount(accountType) {
     this.accountType = accountType;
   }
-  getAccountType() {
-    return this.accountType;
+  toString() {
+    return `Person : [Name = ${this.name}, Address = ${this.address}, Email = ${this.email}, Phone = ${this.phone}]`;
   }
 }
 
 class Guest extends Person {
+  roombookings = [];
+  totalRoomBookings = 0;
+  constructor(name, address, email, phone, accountType) {
+    super(name, address, email, phone, accountType);
+  }
+  addRoomBooking(roombooking) {
+    this.roombookings.push(roombooking);
+  }
+  createBooking(reservationNumber, startDate, durationDays, room) {
+    //ตรวจสอบห้องว่าง
+    // const isRoomAvailable =  room.isRoomAvailable(room, startDate, durationDays);
+
+    if (room.isRoomAvailable()) {
+      const booking = new RoomBooking(
+        reservationNumber,
+        startDate,
+        durationDays,
+        room
+      );
+      this.addRoomBooking(booking);
+      this.totalRoomBookings++;
+      return booking;
+    }
+  }
   toString() {
-    return `Person[Name = ${this.name}, Address = ${this.address}, Email = ${this.email}, Phone = ${this.phone}, AccountType = ${this.accountType}]`;
+    let inbooking = "";
+    for (let i = 0; i < this.roombookings.length; i++) {
+      inbooking += this.roombookings[i].toString();
+    }
+    return `${super.toString()}, AccountType = ${
+      this.accountType
+    } Total Bookings: ${this.totalRoomBookings}\n${inbooking}`;
   }
 }
 class Receptionist extends Person {
+  constructor(name, address, email, phone, accountType) {
+    super(name, address, email, phone, accountType);
+  }
+  createBooking() {}
   toString() {
-    return `Person[Name = ${this.name}, Address = ${this.address}, Email = ${this.email}, Phone = ${this.phone}, accountType = ${this.accountType}]`;
+    return `${super.toString()}, AccountType = ${this.accountType}`;
   }
 }
-
 class Hotel {
-  names = "";
+  name = "";
   location = "";
   rooms = [];
-  constructor(names, location) {
-    this.names = names;
+  constructor(name, location) {
+    this.name = name;
     this.location = location;
   }
-
-  getNames() {
-    return this.names;
+  getRoom() {
+    return this.rooms;
   }
-  getLocation() {
-    return this.location;
+  addNewRoom(room) {
+    this.rooms.push(room);
   }
-  setLocation() {
-    this.location = location;
-  }
-
-  addRoom(room) {
-    this.rooms.push(room); // Adding a room to the hotel
-  }
-
-  getRooms() {
-    return this.rooms; // Returning all rooms in the hotel
-  }
-
   toString() {
-    return `Hotel[name = ${this.names}, Location = ${this.location}]`;
+    let inHotel = "";
+    for (let i = 0; i < this.rooms.length; i++) {
+      inHotel += "\t" + `${this.rooms[i].toString()}` + "\n";
+    }
+    return `Hotel : ${this.name} ${this.location} \n ${inHotel}`;
   }
 }
-
 class Room {
   roomNumber = "";
-  style = "";
-  status = "";
+  style = null;
+  status = null;
   roomPrice = 0;
   constructor(roomNumber, style, status, roomPrice) {
     this.roomNumber = roomNumber;
@@ -114,90 +96,141 @@ class Room {
     this.status = status;
     this.roomPrice = roomPrice;
   }
-  getRoomNumber() {
-    return this.roomNumber;
+  isRoomAvailable(roomNumber) {
+    return (
+      this.roomNumber === roomNumber && this.status === RoomStatus.AVAILABLE
+    );
   }
-  setRoomNumber() {
-    this.roomNumber = this.roomNumber;
-  }
-  getStyle() {
-    return this.style;
-  }
-  setStyle() {
-    this.style = this.style;
-  }
-  getRoomPrice() {
-    return this.roomPrice;
-  }
-  setRoomPrice() {
-    this.roomPrice = this.roomNumber;
-  }
-  getStatus() {
-    return this.status;
-  }
-  setStatus() {
-    this.status = this.status;
+  createRoom(roomNumber, style, status, price) {
+    const room = new Room(roomNumber, style, status, price);
+    return room != null;
   }
   toString() {
-    return `Room[Room = ${this.roomNumber}, Style = ${this.style}, Status = ${this.status},Price = ${this.roomPrice}]`;
+    return `Room [${this.roomNumber}, ${this.style}, ${this.roomPrice}, ${this.status}]`;
+  }
+}
+class RoomBooking {
+  reservationNumber = "";
+  startDate = "";
+  durationDays = 0;
+  status = null;
+  createdBy = null;
+  room = null;
+  constructor(reservationNumber, startDate, durationDays, status, createBy) {
+    this.reservationNumber = reservationNumber;
+    this.startDate = startDate;
+    this.durationDays = durationDays;
+    this.status = status;
+    this.createdBy = createBy;
+  }
+
+  toString() {
+    return ` \n Detail: [Reservation Number: ${this.reservationNumber}, Start Date: ${this.startDate}, Duration: ${this.durationDays}, Status: ${this.status}, Create by: ${this.createdBy.name}]`;
+  }
+  createBooking(reservationNumber, startDate, durationDays, guest, room) {}
+}
+//Enum
+class AccountType {
+  static GUEST = "guest";
+  static RECEPTIONIST = "receptionist";
+  constructor(name) {
+    this.name = name;
   }
 }
 
-class RoomBooking {}
+class RoomStatus {
+  static AVAILABLE = "available";
+  static DISAVAILABLE = "disavailable";
+  static LATECHECKOUT = "latecheckout";
+  static EARLYCHECKELN = "earlycheckeln";
+  constructor(name) {
+    this.name = name;
+  }
+}
 
+class RoomStyle {
+  static DOUBLE_POOL = "Double Bed Pool View";
+  static DOUBLE_SEA = "Double Bed Sea View";
+  static TWIN_POOL = "Twin Bed Pool View";
+  static TWIN_SEA = "Twin Bed Sea View";
+  constructor(name) {
+    this.name = name;
+  }
+}
+
+// --------main
 const main = () => {
-  const Account1 = new Account("Bob", "123456789");
-  console.log(Account1.toString());
-  const Guest1 = new Guest(
+  //------ Person
+  const alice = new Guest(
     "Alice",
-    "dormitory",
-    "Aliceza@gmail.com",
-    "0123456789",
-    "Guest"
+    "Alice house",
+    "Alice@asd.com",
+    "0801234567",
+    AccountType.GUEST
   );
-  console.log(Guest1.toString());
-  const Guest2 = new Guest(
+  const bob = new Guest(
     "Bob",
-    "dormitory",
-    "Bobza@gmail.com",
-    "123456789",
-    "Guest"
+    "Bob house",
+    "Bob@asd.com",
+    "0807654321",
+    AccountType.GUEST
   );
-  console.log(Guest2.toString());
-  const Receptionist1 = new Receptionist(
+
+  const catherine = new Receptionist(
     "Catherine",
-    "House",
-    "CatherineJa@gmail.com",
-    "0620266548",
-    "Receptionist"
+    "Catherine house",
+    "Catherine@asd.com",
+    "0901234567",
+    AccountType.RECEPTIONIST
   );
-  console.log(Receptionist1.toString());
-  const Receptionist2 = new Receptionist(
-    "David",
-    "House",
-    "David@gmail.com",
-    "0841235789",
-    "Receptionist"
+  const devid = new Receptionist(
+    "Devid",
+    "Devid house",
+    "Devid@asd.com",
+    "0907654321",
+    AccountType.RECEPTIONIST
   );
-  console.log(Receptionist2.toString());
 
-  const Hotel1 = new Hotel("SE Hotel", "ThaiLand");
-  console.log(Hotel1.toString(), "Hotel in: ");
-  Hotel1.getRooms().forEach((room) => {
-    console.log(room.toString());
-  });
-  const Room1 = new Room("589", "Double bed Sea view", "Fee", 2500);
-  Hotel1.addRoom(Room1);
-  console.log(Room1.toString());
-  const Room2 = new Room("654", "Twin bed pool view", "Fee", 3500);
-  Hotel1.addRoom(Room2);
-  console.log(Room2.toString());
-  const Room3 = new Room("780", "Twin bed Sea view", "Fee", 4500);
-  Hotel1.addRoom(Room3);
-  console.log(Room3.toString());
-  const Room4 = new Room("1158", "Double  bed pool view", "Fee", 8500);
-  Hotel1.addRoom(Room4);
-  console.log(Room4.toString());
+  //------ Hotel
+  const hotel = new Hotel("SE Hotel", "NPRU");
+
+  const room1 = new Room(
+    "Room1",
+    RoomStyle.DOUBLE_POOL,
+    RoomStatus.AVAILABLE,
+    1000
+  );
+  const room2 = new Room(
+    "Room2",
+    RoomStyle.DOUBLE_SEA,
+    RoomStatus.AVAILABLE,
+    2000
+  );
+  const room3 = new Room(
+    "Room3",
+    RoomStyle.TWIN_POOL,
+    RoomStatus.AVAILABLE,
+    4000
+  );
+  const room4 = new Room(
+    "Room4",
+    RoomStyle.TWIN_SEA,
+    RoomStatus.AVAILABLE,
+    5000
+  );
+
+  hotel.addNewRoom(room1);
+  hotel.addNewRoom(room2);
+  hotel.addNewRoom(room3);
+  hotel.addNewRoom(room4);
+
+  bob.createBooking("R01", "11/03/2567", 3, room2);
+
+  console.log(bob.toString());
+  console.log(alice.toString());
+  //   console.log(catherine.toString());
+  //   console.log(devid.toString());
+  //   console.log(hotel.toString());
+  console.log(alice.createBooking("R01", "11/03/2567", 10, room1));
 };
-
 main();
