@@ -1,4 +1,4 @@
-class Accocnt {
+class Account {
   username = "";
   password = "";
   status = "";
@@ -23,7 +23,7 @@ class Person {
   address = "";
   email = "";
   phone = "";
-  accountType = "";
+  accountType = null;
   constructor(name, address, email, phone, accountType) {
     this.name = name;
     this.address = address;
@@ -62,12 +62,12 @@ class Person {
 
 class Guest extends Person {
   toString() {
-    return `Person[name = ${this.name}, address = ${this.address}, email = ${this.email}, phone = ${this.phone}, accountType = ${this.accountType}]`;
+    return `Person[Name = ${this.name}, Address = ${this.address}, Email = ${this.email}, Phone = ${this.phone}, AccountType = ${this.accountType}]`;
   }
 }
 class Receptionist extends Person {
   toString() {
-    return `Person[name = ${this.name}, address = ${this.address}, email = ${this.email}, phone = ${this.phone}, accountType = ${this.accountType}]`;
+    return `Person[Name = ${this.name}, Address = ${this.address}, Email = ${this.email}, Phone = ${this.phone}, accountType = ${this.accountType}]`;
   }
 }
 
@@ -146,11 +146,8 @@ class Room {
 class RoomBooking {}
 
 const main = () => {
-    const Accocnt1 = new Accocnt(
-        "Bob",
-        "123456789"
-    )
-    console.log(Accocnt1.toString());
+  const Account1 = new Account("Bob", "123456789");
+  console.log(Account1.toString());
   const Guest1 = new Guest(
     "Alice",
     "dormitory",
@@ -183,19 +180,23 @@ const main = () => {
     "Receptionist"
   );
   console.log(Receptionist2.toString());
-  
+
   const Hotel1 = new Hotel("SE Hotel", "ThaiLand");
-  console.log(Hotel1.toString());
+  console.log(Hotel1.toString(), "Hotel in: ");
   Hotel1.getRooms().forEach((room) => {
     console.log(room.toString());
   });
-  const Room1 = new Room("589", "Double bed Sea view", "Fee", 2500); Hotel1.addRoom(Room1);
+  const Room1 = new Room("589", "Double bed Sea view", "Fee", 2500);
+  Hotel1.addRoom(Room1);
   console.log(Room1.toString());
-  const Room2 = new Room("654", "Twin bed pool view", "Fee", 3500); Hotel1.addRoom(Room2);
+  const Room2 = new Room("654", "Twin bed pool view", "Fee", 3500);
+  Hotel1.addRoom(Room2);
   console.log(Room2.toString());
-  const Room3 = new Room("780", "Twin bed Sea view", "Fee", 4500); Hotel1.addRoom(Room3);
+  const Room3 = new Room("780", "Twin bed Sea view", "Fee", 4500);
+  Hotel1.addRoom(Room3);
   console.log(Room3.toString());
-  const Room4 = new Room("1158", "Double  bed pool view", "Fee", 8500); Hotel1.addRoom(Room4);
+  const Room4 = new Room("1158", "Double  bed pool view", "Fee", 8500);
+  Hotel1.addRoom(Room4);
   console.log(Room4.toString());
 };
 
