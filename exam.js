@@ -185,7 +185,7 @@ const main = () => {
   console.log(Receptionist2.toString());
   
   const Hotel1 = new Hotel("SE Hotel", "ThaiLand");
-  console.log("Rooms in Hotel1:");
+  console.log(Hotel1.toString());
   Hotel1.getRooms().forEach((room) => {
     console.log(room.toString());
   });
