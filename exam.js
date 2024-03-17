@@ -175,7 +175,7 @@ class RoomBooking {
 }
 
   toString() {
-    return `RoomBooking: [BookingNumber: ${this.reservationNumber}, Room : ${this.room} Status: ${this.status ? 'Available' : 'Available'}, Check-in date: ${this.startDate}, Stay duration: ${this.durationDays} nights, Booked by: ${this.createdBy || 'Catherine'}]`;
+    return `RoomBooking: [BookingNumber: ${this.reservationNumber}, Room : ${this.room} Status: ${this.status ? 'Available' : 'Booked'}, Check-in date: ${this.startDate}, Stay duration: ${this.durationDays} nights, Booked by: ${this.createdBy || 'Bob'}]`;
   }
 }
 //------ Enum------
@@ -281,13 +281,15 @@ const main = () => {
   hotel.addNewRoom(room3);
   hotel.addNewRoom(room4);
 
-  bob.createBooking("Booking01", "11/03/2567", 3, room2);
+  bob.createBooking("Booking01", "13/04/2567", 3, room2);
+  alice.createBooking("Booking02", "15/04/2567", 2, room3);
+  
 
   console.log(hotel.toString());
   console.log(bob.toString());
   console.log();
   console.log(alice.toString());
-  console.log(catherine.toString());
-  console.log(devid.toString());
+  //console.log(catherine.toString());
+  //console.log(devid.toString());
 };
 main();
